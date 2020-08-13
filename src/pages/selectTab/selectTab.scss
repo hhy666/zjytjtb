@@ -1,0 +1,21 @@
+.tab{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    border:1px solid #1380FF;
+    border-right: none;
+}
+
+.tab_btn{
+    display: flex;
+    height: 100%;
+    border-right: 1px solid #1380FF;
+    justify-content: center;
+    align-items: center;
+    font-size: 15Px;
+}
+
+.tab .cur{
+    background-color: #1380FF;
+    color: #fff;
+}
