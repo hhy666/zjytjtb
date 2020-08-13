@@ -17,7 +17,8 @@ export default {
     }
   },
   props:{
-      option: Object
+      option: Object,
+      getChartOption: Function
   },
   components: {
      
@@ -34,9 +35,27 @@ export default {
 
       const chart = echarts.init(cvs);
 
-      chart.setOption(this.option);
+      chart.showLoading({
+            text: '数据正在加载...',
+            textStyle: { fontSize : 30 , color: '#444' },
+            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
+      });
 
-      window.onresize = chart.resize;
+      const _this = this;
+
+      const sil = setInterval(function(){
+        _this.option = _this.getChartOption();
+
+        if(_this.option != null){
+          clearInterval(_this.sil);
+
+          chart.setOption(_this.option);
+
+          chart.hideLoading();
+
+          window.onresize = chart.resize;
+        }
+      },100)
     }
   }
 }
