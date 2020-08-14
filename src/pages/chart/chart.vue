@@ -49,6 +49,11 @@ export default {
         if(_this.option != null){
           clearInterval(_this.sil);
 
+          if(_this.option.error){
+            alert(_this.option.msg);
+            return false;
+          }
+
           chart.setOption(_this.option);
 
           chart.hideLoading();

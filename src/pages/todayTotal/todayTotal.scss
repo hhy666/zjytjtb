@@ -22,21 +22,24 @@
 
 .ttu_today{
     display: flex;
+    width: 100%;
     height: 20Px;
-    justify-content: space-around;
+    justify-content: center;
     flex-direction: row;
     align-items: center;
-    font-size: 13Px;
+    font-size: 10Px;
 }
 
 .ttu_today .ttu_today_w{
     display: flex;
     color: #333;
+    white-space: nowrap;
 }
 
 .ttu_today .ttu_today_n{
     display: flex;
     color: red;
+    white-space: nowrap;
 }
 
 .ttu_total{
@@ -55,7 +58,7 @@
 
 .ttu_total .ttu_total_w{
     display: flex;
-    font-size: 13Px;
+    font-size: 10Px;
     align-self: flex-start;
     line-height: 32Px;
 }

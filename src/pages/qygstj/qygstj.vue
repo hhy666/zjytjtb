@@ -41,6 +41,7 @@
 
 <script>
 import './qygstj.scss'
+import requestData from '../util/request'
 
 export default {
   name: 'qygstj',
@@ -53,52 +54,43 @@ export default {
   },
   components: {},
   created(){
-      this.tableData = [];    
+      const _this = this;
 
-      for (let index = 0; index < 3; index++) {
-          const tr = {};
+      requestData({
+          operServiceId: 'reportService',
+          operId: 'findCompanyMsgByArea',
+          data: {}
+      },response => {
+          _this.tableData = response.data.data.tableData;
 
-          tr.gsname = index == 0 ? '欧洲公司' : (index == 1 ? '东南亚公司' : '非洲');
-          // 委托单量
-          tr.wtdl = parseInt(Math.random()*10000)+'万';
-          // 开票收入
-          tr.kpsr = parseInt(Math.random()*10000)+'万';
-          // 成本总额
-          tr.cbze = parseInt(Math.random()*10000)+'万';
-          // 出证数量
-          tr.czsl = parseInt(Math.random()*10000)+'万';
+          _this.showedChildrenIndex = [];
 
-          // 随机数
-          const sj = parseInt(Math.random()*20), child = [];
-
-          for (let idx = 0; idx < sj; idx++) {
-              child.push({
-                  gsname: tr.gsname+idx,
-                  wtdl: parseInt(Math.random()*100)+'万',
-                  kpsr: parseInt(Math.random()*100)+'万',
-                  cbze: parseInt(Math.random()*100)+'万',
-                  czsl:parseInt(Math.random()*100)+'万'
-              });
+          // 设置默认展开第1行
+          for (let index = 0; index < _this.tableData.length; index++) {
+              _this.showedChildrenIndex.push(index == 0 ? true : false);
           }
 
-          tr.children = child;
-
-          this.tableData.push(tr);
-    }
-
-    this.showedChildrenIndex = [];
-
-    // 设置默认展开第1行
-    for (let index = 0; index < this.tableData.length; index++) {
-        this.showedChildrenIndex.push(index == 0 ? true : false);
-    }
-
-    console.log(this.tableData)
+          console.log(_this.tableData)
+      });      
   },
   mounted(){},
   methods: {
     showChildrenData(idx){
         this.$set(this.showedChildrenIndex,idx,!this.showedChildrenIndex[idx]);
+    },
+    gotoGsDetail(index, idx){
+        // 设置 点击的公司信息
+        if(idx < 0){
+          Taro.setStorageSync("showType",this.tableData[index].id);
+          Taro.setStorageSync("showTypeName",this.tableData[index].gsname);
+        }else{
+          Taro.setStorageSync("showType",this.tableData[index].children[idx].id);
+          Taro.setStorageSync("showTypeName",this.tableData[index].children[idx].gsname);
+        }
+
+        Taro.reLaunch({
+            url:'/pages/index/index?s='+Math.random()
+        });
     }
   }
 }
