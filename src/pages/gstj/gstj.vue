@@ -42,6 +42,7 @@
 <script>
 import './gstj.scss'
 import Taro from '@tarojs/taro'
+import requestData from '../util/request'
 
 export default {
   name: 'gstj',
@@ -54,50 +55,27 @@ export default {
   },
   components: {},
   created(){
-      this.tableData = [];    
-      
-      for (let index = 0; index < 3; index++) {
-          const tr = {};
+        const _this = this;
 
-          tr.gsname = index == 0 ? '检验公司' : (index == 1 ? '测试公司' : '认证中心');
-          // 公司id
-          tr.id = parseInt(Math.random()*10000+1);
-          // 委托单量
-          tr.wtdl = parseInt(Math.random()*10000)+'万';
-          // 开票收入
-          tr.kpsr = parseInt(Math.random()*10000)+'万';
-          // 成本总额
-          tr.cbze = parseInt(Math.random()*10000)+'万';
-          // 出证数量
-          tr.czsl = parseInt(Math.random()*10000)+'万';
+        // 获取缓存的id
+        const companyId = Taro.getStorageSync("showType");    
 
-          // 随机数
-          const sj = parseInt(Math.random()*20 + 2), child = [];
+        requestData({
+            operServiceId: 'reportService',
+            operId: 'findCompanyMsgByCompany',
+            data: {companyId: companyId}
+        },response => {
+            _this.tableData = response.data.data.tableData;
 
-          for (let idx = 0; idx < sj; idx++) {
-              child.push({
-                  id: parseInt(Math.random()*10000+1),
-                  gsname: tr.gsname+idx,
-                  wtdl: parseInt(Math.random()*100)+'万',
-                  kpsr: parseInt(Math.random()*100)+'万',
-                  cbze: parseInt(Math.random()*100)+'万',
-                  czsl:parseInt(Math.random()*100)+'万'
-              });
-          }
+            _this.showedChildrenIndex = [];
 
-          tr.children = child;
+            // 设置默认展开第1行
+            for (let index = 0; index < _this.tableData.length; index++) {
+                _this.showedChildrenIndex.push(index == 0 ? true : false);
+            }
 
-          this.tableData.push(tr);
-      }
-
-      this.showedChildrenIndex = [];
-
-      // 设置默认展开第1行
-      for (let index = 0; index < this.tableData.length; index++) {
-          this.showedChildrenIndex.push(index == 0 ? true : false);
-      }
-
-      console.log(this.tableData)
+            console.log(_this.tableData)
+        });
   },
   mounted(){},
   methods: {
