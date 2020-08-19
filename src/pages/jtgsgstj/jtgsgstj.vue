@@ -11,8 +11,15 @@
             <text class="jtgsgstj_table_head_th" >出证数量</text>
         </view>
         <view class="jtgsgstj_table_tr" v-for="(item,index) in tableData" :key="index" >
-            <text class="jtgsgstj_table_head_td" v-if="curCompanyId == item.id" >{{item.gsname}}</text>
-            <a class="jtgsgstj_table_head_td gtht_a" @click="gotoGsDetail(index)" v-else >{{item.gsname}}</a>
+            <!-- 暂时不做下钻 -->
+            <!-- <text class="jtgsgstj_table_head_td" v-if="curCompanyId == item.id" >{{item.gsname}}</text>
+            <a class="jtgsgstj_table_head_td gtht_a" @click="gotoGsDetail(index)" v-else >{{item.gsname}}</a> -->
+            <text class="jtgsgstj_table_head_td" 
+              @touchstart="touchStart($event,item.gsname,index)" 
+              @touchend="touchEnd($event,item.gsname,index)" 
+              :title="item.gsname" >
+              {{item.gsname.length > 6 ? item.gsname.substr(0,6) + '..' : item.gsname}}
+            </text>
             <text class="jtgsgstj_table_head_td" >{{item.wtdl}}</text>
             <text class="jtgsgstj_table_head_td" >{{item.kpsr}}</text>
             <text class="jtgsgstj_table_head_td" >{{item.cbze}}</text>
@@ -26,6 +33,8 @@
 <script>
 import './jtgsgstj.scss'
 import Taro from '@tarojs/taro'
+import {$} from '@tarojs/extend'
+import requestData from '../util/request'
 
 export default {
   name: 'jtgsgstj',
@@ -39,29 +48,24 @@ export default {
   },
   components: {},
   created(){
-      // 获取当前展示的公司id
-      this.curCompanyId = Taro.getStorageSync("showType");
+    // 获取当前展示的公司id
+    this.curCompanyId = Taro.getStorageSync("showType");
+    // 获取 展示区域
+    const areaId = Taro.getStorageSync("showArea");
 
-      // 初始化获取子公司及当前公司信息
-      this.tableData = [];    
-      
-      for (let index = 0; index < parseInt(Math.random()*30 + 3); index++) {
-          const tr = {};
+    if(areaId == 2){
+      this.jtgsgstjPart1Title = '按区域公司统计';
+    }
 
-          tr.gsname = index == 0 ? Taro.getStorageSync("showTypeName") : '子公司'+index;
-          // 公司id
-          tr.id = index == 0 ? this.curCompanyId : parseInt(Math.random()*10000+1);
-          // 委托单量
-          tr.wtdl = parseInt(Math.random()*10000)+'万';
-          // 开票收入
-          tr.kpsr = parseInt(Math.random()*10000)+'万';
-          // 成本总额
-          tr.cbze = parseInt(Math.random()*10000)+'万';
-          // 出证数量
-          tr.czsl = parseInt(Math.random()*10000)+'万';
+    const _this = this;
 
-          this.tableData.push(tr);
-      }
+    requestData({
+        operServiceId: 'reportService',
+        operId: 'findJtgsCompanyMsg',
+        data: {companyId: _this.curCompanyId}
+    },response => {
+        _this.tableData = response.data.data.tableData;
+    });      
   },
   mounted(){},
   methods: {
@@ -73,6 +77,32 @@ export default {
           Taro.reLaunch({
               url:'/pages/index/index?s='+Math.random()
           });
+      },
+      touchStart(e,name,idx){
+        try {
+          e.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+ 
+          var touch = e.touches[0]; //获取第一个触点
+          var x = Number(touch.clientX); //页面触点X坐标
+          var y = Number(touch.clientY); //页面触点Y坐标
+          
+          let $word = $("<text id='over_name_"+idx+"' >"+name+"</text>");
+          $word.css({
+            position:"fixed",
+            top:(y-50)+'Px',
+            left:(x+30)+'px',
+            display:'block',
+            zIndex:999,
+            backgroundColor:'inherit',
+            color:'#000'
+          });
+          $("body").append($word);
+        } catch (e) {
+          alert('touchSatrtFunc：' + e.message);
+        }
+      },
+      touchEnd(e,name,idx){
+        $("#over_name_"+idx).remove();
       }
   }
 }

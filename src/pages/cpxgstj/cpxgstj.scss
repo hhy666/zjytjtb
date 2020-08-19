@@ -1,10 +1,10 @@
-.jtgsgstj{
+.cpxgstj{
     display: flex;
     height: auto;
     width: 100%;
 }
 
-.jtgsgstj_part_1{
+.cpxgstj_part_1{
     display: flex;
     width: 96%;
     height: auto;
@@ -17,7 +17,7 @@
     justify-content: space-around;
 }
 
-.jtgsgstj_part_1_title{
+.cpxgstj_part_1_title{
     display: flex;
     height: 30Px;
     font-size: 14Px;
@@ -28,7 +28,7 @@
     padding:10Px 0 0 10Px;
 }
 
-.jtgsgstj_table{
+.cpxgstj_table{
     display: flex;
     width: 98%;
     height: auto;
@@ -36,21 +36,21 @@
     flex-direction: column;
 }
 
-.jtgsgstj_table_head,.jtgsgstj_table_tr{
+.cpxgstj_table_head,.cpxgstj_table_tr{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.jtgsgstj_table_tr{
+.cpxgstj_table_tr{
     border-right: 1px solid #ccc;
 }
 
-.jtgsgstj_table_tr:last-child{
+.cpxgstj_table_tr:last-child{
     border-bottom: 1px solid #ccc;
 }
 
-.jtgsgstj_table_head_th,.jtgsgstj_table_head_td{
+.cpxgstj_table_head_th,.cpxgstj_table_head_td{
     display: flex;
     height: 35Px;
     flex: 1 1 18%;
@@ -59,39 +59,38 @@
     text-align: center;
 }
 
-.jtgsgstj_table_head_td{
-    background-color: #fff;
+.cpxgstj_table_head_td{
+    background-color: #F8F8F8;
     border-top: 1Px solid #ccc;
     border-left: 1Px solid #ccc;
     flex: 1 1 calc(18% - 2Px);
 }
 
-.jtgsgstj_table_head_td:nth-child(1){
+.cpxgstj_table_head_td:nth-child(1){
     flex: 1 1 calc(28% - 2Px);
-    white-space: nowrap;
 }
 
-.jtgsgstj_table_head_th:nth-child(1){
+.cpxgstj_table_tr:last-child .cpxgstj_table_head_td{
+    background-color: #F0F8FF;
+}
+
+.cpxgstj_table_head_th:nth-child(1){
     flex: 1 1 28%;
     background-color: #ECFBFB;
 }
 
-.jtgsgstj_table_head_th:nth-child(2){
+.cpxgstj_table_head_th:nth-child(2){
     background-color: #DAE9F9;
 }
 
-.jtgsgstj_table_head_th:nth-child(3){
+.cpxgstj_table_head_th:nth-child(3){
     background-color: #FFECEC;
 }
 
-.jtgsgstj_table_head_th:nth-child(4){
+.cpxgstj_table_head_th:nth-child(4){
     background-color: #D7F7FF;
 }
 
-.jtgsgstj_table_head_th:nth-child(5){
+.cpxgstj_table_head_th:nth-child(5){
     background-color: #E6FDED;
-}
-
-.jtgsgstj_table_tr .gtht_a{
-    color: #1380FF;
 }

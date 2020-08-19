@@ -24,7 +24,7 @@ export default {
      
   },
   created(){
-    this.ecid = new Date().getMilliseconds+''+parseInt(Math.random()*1000000);
+    this.ecid = new Date().getMilliseconds()+''+parseInt(Math.random()*1000000);
   },
   mounted(){
       this.createEcharts();
@@ -40,27 +40,24 @@ export default {
             textStyle: { fontSize : 30 , color: '#444' },
             effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
       });
-
-      const _this = this;
-
-      const sil = setInterval(function(){
-        _this.option = _this.getChartOption();
-
-        if(_this.option != null){
-          clearInterval(_this.sil);
-
-          if(_this.option.error){
-            alert(_this.option.msg);
+    }
+  },
+  watch:{
+    option:{
+      deep:true,
+      handler(val, oldVal){
+        if(val != null){
+          if(val.error){
+            alert(val.msg);
             return false;
           }
-
-          chart.setOption(_this.option);
-
+          const cvs = document.getElementById(this.ecid);
+          const chart = echarts.init(cvs);
+          chart.setOption(val);
           chart.hideLoading();
-
           window.onresize = chart.resize;
         }
-      },100)
+      }
     }
   }
 }

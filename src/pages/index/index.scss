@@ -137,7 +137,7 @@ $topNextHt: 180Px;
 }
 
 .sr_com, .area_tab, .area_tab_body,
-.sr_zb, .sr_gx{
+.sr_zb, .sr_gx, .cpx_gx{
     display: flex;
     width: 96%;
     height: 260Px;
@@ -149,9 +149,13 @@ $topNextHt: 180Px;
     top: 295Px;
 }
 
+.sr_com{
+    top: 315Px;;
+}
+
 .area_tab{
     height: 40Px;
-    top:566Px;
+    top:586Px;
 }
 
 .area_tab_body{
@@ -161,11 +165,15 @@ $topNextHt: 180Px;
 }
 
 .sr_zb{
-    top:566Px;
+    top:586Px;
 }
 
 .sr_gx{
-    top:836Px;
+    top:856Px;
+}
+
+.cpx_gx{
+    top:1126Px;
 }
 
 .change_company{

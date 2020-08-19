@@ -1,26 +1,26 @@
 <template>
-  <view class='zbpie'>
-    <view class="zbpie_part_1" >
-      <text class="zbpie_part_1_title" >{{zbpiePart1Title}}</text>
-      <view class="zbpie_chart_jnqndb" >
-        <chart :option="zbpieOption" />
+  <view class='srpie'>
+    <view class="srpie_part_1" >
+      <text class="srpie_part_1_title" >{{srpiePart1Title}}</text>
+      <view class="srpie_chart_jnqndb" >
+        <chart :option="srpieOption" />
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import './zbpie.scss'
+import './srpie.scss'
 import chart from "../chart/chart.vue";
 import Taro from '@tarojs/taro'
 import requestData from '../util/request'
 
 export default {
-  name: 'zbpie',
+  name: 'srpie',
   data(){
     return {
-        zbpiePart1Title:'一级产品线开票收入占比',
-        zbpieOption:null
+        srpiePart1Title:'重点服务技术中类收入',
+        srpieOption:null
     }
   },
   components: {
@@ -34,17 +34,17 @@ export default {
 
     requestData({
         operServiceId: 'reportService',
-        operId: 'findFirstCompanyKp',
+        operId: 'findSrpieCpx',
         data: {companyId: companyId}
     },response => {
-        _this.initZbpieOption(response.data.data.zbpieOption);
+        _this.initSrpieOption(response.data.data.tableData);
         console.log(response.data.data);
     });
   },
   mounted(){},
   methods: {
-      initZbpieOption(sdata){
-          this.zbpieOption = {
+      initSrpieOption(sdata){
+          this.srpieOption = {
                 backgroundColor:"#fff",
                 series: [
                     {

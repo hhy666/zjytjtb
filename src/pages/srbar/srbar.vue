@@ -1,27 +1,27 @@
 <template>
-  <view class='gxbar'>
-    <view class="gxbar_part_1" >
-      <text class="gxbar_part_1_title" >{{gxbarPart1Title}}</text>
-      <view class="gxbar_chart_jnqndb" >
-        <chart :option="gxbarOption" />
+  <view class='srbar'>
+    <view class="srbar_part_1" >
+      <text class="srbar_part_1_title" >{{srbarPart1Title}}</text>
+      <view class="srbar_chart_jnqndb" >
+        <chart :option="srbarOption" />
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import './gxbar.scss'
+import './srbar.scss'
 import chart from "../chart/chart.vue";
 import Taro from '@tarojs/taro'
 import requestData from '../util/request'
 import * as echarts from "../../ec-canvas/echarts.min.js";
 
 export default {
-  name: 'gxbar',
+  name: 'srbar',
   data(){
     return {
-        gxbarPart1Title:'客户贡献值TOP5',
-        gxbarOption:null,
+        srbarPart1Title:'重点服务对象中类收入',
+        srbarOption:null,
         ecId:String
     }
   },
@@ -32,18 +32,14 @@ export default {
     const _this = this;
 
     // 获取缓存的id
-    const companyId = Taro.getStorageSync("showType");  
-    // 获取area值 
-    const showArea = Taro.getStorageSync("showArea");  
-    // operId
-    const operId = showArea < 3 ? 'findJtgsGxbar' : 'findCpxGxbar';
+    const companyId = Taro.getStorageSync("showType");    
 
     requestData({
         operServiceId: 'reportService',
-        operId: operId,
+        operId: 'findJtgsSrbar',
         data: {companyId: companyId}
     },response => {
-        _this.initGxbarOption(response.data.data.gxbarOption);
+        _this.initsrbarOption(response.data.data.srbarOption);
         // setTimeout(()=>{
         //     _this.setChartClick();
         // },1);
@@ -51,23 +47,16 @@ export default {
   },
   mounted(){},
   methods: {
-      initGxbarOption(option){
-          this.gxbarOption = {
+      initsrbarOption(option){
+          this.srbarOption = {
                 backgroundColor:'#fff',
                 color:['#5087E5', '#00B0F0'],
                 tooltip:{
                     show:true,
                     trigger:'axis'
                 },
-                legend:{
-                    icon:'rect',
-                    itemWidth:13,
-                    itemHeight:13,
-                    top:5,
-                    data:['已到款','贡献值']
-                },
                 grid: {
-                    top:45,
+                    top:25,
                     bottom:30,
                     right:20,
                     left: '18%'
@@ -127,34 +116,10 @@ export default {
                 },
                 series: [
                     {
-                        name:'贡献值',
                         type: 'bar',
                         barWidth:10,
                         barGap:'20%',
-                        data: option.sdata[0],
-                        label:{
-                            show:true,
-                            position:'right',
-                            color:'#000',
-                            verticalAlign:'middle',
-                            fontWeight:'bold',
-                            offset:[5,0],
-                            formatter:params => {
-                                const value = params.value;
-                                return value > 100000000 ? 
-                                        parseFloat(value/100000000).toFixed(2)+'亿' 
-                                        : ( value > 10000 ? 
-                                            parseFloat(value/10000).toFixed(2)+'万' : value );
-                            }
-                        },
-                        z:2
-                    },
-                    {
-                        name:'已到款',
-                        type: 'bar',
-                        barWidth:10,
-                        barGap:'20%',
-                        data: option.sdata[1],
+                        data: option.sdata,
                         label:{
                             show:true,
                             position:'right',
