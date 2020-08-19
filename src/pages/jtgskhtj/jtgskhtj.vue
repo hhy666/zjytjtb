@@ -10,19 +10,27 @@
       <view class="jtgskhtj_table" >
         <view class="jtgskhtj_table_head" >
             <text class="jtgskhtj_table_head_th" >客户名称</text>
-            <text class="jtgskhtj_table_head_th" >委托单量</text>
+            <text class="jtgskhtj_table_head_th" >委托金额</text>
             <text class="jtgskhtj_table_head_th" >已开票</text>
             <text class="jtgskhtj_table_head_th" >已收款</text>
             <text class="jtgskhtj_table_head_th" >出证数量</text>
         </view>
         <view class="jtgskhtj_table_tr" v-for="(item,index) in tableData" :key="index" >
-            <a class="jtgskhtj_table_head_td khname" >{{item.khname}}</a>
-            <text class="jtgskhtj_table_head_td" >{{item.wtdl}}</text>
+            <a class="jtgskhtj_table_head_td khname" 
+              @touchstart="touchStart($event,item.khname,index)" 
+              @touchend="touchEnd($event,item.khname,index)" 
+              :title="item.khname" >
+              {{item.khname.length > 6 ? item.khname.substr(0,6) + '..' : item.khname}}
+            </a>
+            <text class="jtgskhtj_table_head_td" >{{item.wtje}}</text>
             <text class="jtgskhtj_table_head_td" >{{item.ykp}}</text>
             <text class="jtgskhtj_table_head_td" >{{item.ysk}}</text>
             <text class="jtgskhtj_table_head_td" >{{item.czsl}}</text>
         </view>
-        <a class="jtgskhtj_load_more" @click="loadMoreData()" v-if="tableData.length < 100" >更多>></a>
+        <text class="data_loading" v-if="dataLoading" >数据加载中...</text>
+        <a class="jtgskhtj_load_more" 
+          @click="loadMoreData()" 
+          v-if="tableData.length < 100 && showLoadMore" >更多>></a>
       </view>
     </view>
   </view>
@@ -30,6 +38,9 @@
 
 <script>
 import './jtgskhtj.scss'
+import {$} from '@tarojs/extend'
+import Taro from '@tarojs/taro'
+import requestData from '../util/request'
 
 export default {
   name: 'jtgskhtj',
@@ -39,83 +50,105 @@ export default {
         explain:'取客户委托金额前100名',
         tableData:Array,
         showedChildrenIndex:Array,
-        chooseThis:1
+        chooseThis:2,
+        pageNum:1,
+        dataLoading:true,
+        showLoadMore:true
     }
   },
   components: {},
   created(){
-      this.tableData = [];    
+      const _this = this;
 
-      // 随机数
-      const sj = parseInt(Math.random()*20 + 2);
+      // 获取缓存的id
+      const companyId = Taro.getStorageSync("showType");    
 
-      for (let index = 0; index < sj; index++) {
-          const tr = {};
+      requestData({
+          operServiceId: 'reportService',
+          operId: 'findJtgsTableKh',
+          data: {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
+      },response => {
+        _this.tableData = response.data.data.tableData;
+        this.dataLoading = false;
 
-          tr.khname = '客户名称';
-          // 委托单量
-          tr.wtdl = parseInt(Math.random()*10000)+'万';
-          // 已开票
-          tr.ykp = parseInt(Math.random()*10000)+'万';
-          // 已收款
-          tr.ysk = parseInt(Math.random()*10000)+'万';
-          // 出证数量
-          tr.czsl = parseInt(Math.random()*10000)+'万';
-
-          this.tableData.push(tr);
-      }
-
-      console.log(this.tableData)
+        if(response.data.data.tableData.length < 10 || this.pageNum > 10){
+          this.showLoadMore = false;
+        }
+      });
   },
   mounted(){},
   methods: {
       searchData(flag){
         this.chooseThis = flag;  
-        this.tableData = [];    
+        this.pageNum = 1;
+        this.dataLoading = true;
+        this.showLoadMore = true;
+        this.tableData = [];
+        const _this = this;
 
-        // 随机数
-        const sj = parseInt(Math.random()*20 + 2);
+        // 获取缓存的id
+        const companyId = Taro.getStorageSync("showType");    
 
-        for (let index = 0; index < sj; index++) {
-            const tr = {};
-
-            tr.khname = '客户名称';
-            // 委托单量
-            tr.wtdl = parseInt(Math.random()*10000)+'万';
-            // 已开票
-            tr.ykp = parseInt(Math.random()*10000)+'万';
-            // 已收款
-            tr.ysk = parseInt(Math.random()*10000)+'万';
-            // 出证数量
-            tr.czsl = parseInt(Math.random()*10000)+'万';
-
-            this.tableData.push(tr);
-        }
-
+        requestData({
+            operServiceId: 'reportService',
+            operId: 'findJtgsTableKh',
+            data: {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
+        },response => {
+          _this.tableData = response.data.data.tableData;
+          this.dataLoading = false;
+          
+          if(response.data.data.tableData.length < 10 || this.pageNum > 10){
+            this.showLoadMore = false;
+          }
+        });
       },
       loadMoreData(){
-        // 随机数
-        const sj = parseInt(Math.random()*20 + 2);
+        this.dataLoading = true;
+        const _this = this;
 
-        for (let index = 0; index < sj; index++) {
-            const tr = {};
+        // 获取缓存的id
+        const companyId = Taro.getStorageSync("showType");    
 
-            tr.khname = '客户名称';
-            // 委托单量
-            tr.wtdl = parseInt(Math.random()*10000)+'万';
-            // 已开票
-            tr.ykp = parseInt(Math.random()*10000)+'万';
-            // 已收款
-            tr.ysk = parseInt(Math.random()*10000)+'万';
-            // 出证数量
-            tr.czsl = parseInt(Math.random()*10000)+'万';
+        requestData({
+          operServiceId: 'reportService',
+          operId: 'findJtgsTableKh',
+          data: {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
+        },response => {
+          _this.tableData = _this.tableData.concat(response.data.data.tableData);
+          this.dataLoading = false;
 
-            this.tableData.push(tr);
+          if(response.data.data.tableData.length < 10 || this.pageNum > 10){
+            this.showLoadMore = false;
+          }
+        });
+      },
+      touchStart(e,name,idx){
+        try {
+          e.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+ 
+          var touch = e.touches[0]; //获取第一个触点
+          var x = Number(touch.clientX); //页面触点X坐标
+          var y = Number(touch.clientY); //页面触点Y坐标
+          
+          let $word = $("<text id='over_name_"+idx+"' >"+name+"</text>");
+          $word.css({
+            position:"fixed",
+            top:(y-50)+'Px',
+            left:(x+30)+'px',
+            display:'block',
+            zIndex:999,
+            backgroundColor:'inherit',
+            color:'#000'
+          });
+          $("body").append($word);
+        } catch (e) {
+          alert('touchSatrtFunc：' + e.message);
         }
-
-        console.log(this.tableData.length)
+      },
+      touchEnd(e,name,idx){
+        $("#over_name_"+idx).remove();
       }
-  }
+    }
 }
 </script>
 <style lang='scss' scoped>

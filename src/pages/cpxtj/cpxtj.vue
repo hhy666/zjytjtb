@@ -11,14 +11,11 @@
             <text class="cpxtj_table_head_th" >出证数量</text>
         </view>
         <view class="cpxtj_table_tr" v-for="(item,index) in tableData" :key="index" >
-            <view class="cpxtj_table_head_td" >
+            <a class="cpxtj_table_head_td" @click="showChildrenData(index)" >
                 <a :class="{icon_close:!showedChildrenIndex[index], icon_open: showedChildrenIndex[index]}" 
-                    v-if="item.children.length > 0"
-                    @click="showChildrenData(index)" ></a>
-                <text class="gtht_name" 
-                    :class="{iconNotExist:item.children.length == 0}" 
-                    >{{item.gsname}}</text>
-            </view>
+                    v-if="item.children.length > 0" ></a>
+                <text :class="{iconNotExist:item.children.length == 0}" >{{item.gsname}}</text>
+            </a>
             <text class="cpxtj_table_head_td" >{{item.wtdl}}</text>
             <text class="cpxtj_table_head_td" >{{item.kpsr}}</text>
             <text class="cpxtj_table_head_td" >{{item.cbze}}</text>
@@ -41,6 +38,7 @@
 
 <script>
 import './cpxtj.scss'
+import Taro from '@tarojs/taro'
 import requestData from '../util/request'
 
 export default {
@@ -80,13 +78,9 @@ export default {
     },
     gotoGsDetail(index, idx){
         // 设置 点击的公司信息
-        if(idx < 0){
-        Taro.setStorageSync("showType",this.tableData[index].id);
-        Taro.setStorageSync("showTypeName",this.tableData[index].gsname);
-        }else{
         Taro.setStorageSync("showType",this.tableData[index].children[idx].id);
+        Taro.setStorageSync("showArea",3);
         Taro.setStorageSync("showTypeName",this.tableData[index].children[idx].gsname);
-        }
 
         Taro.reLaunch({
             url:'/pages/index/index?s='+Math.random()

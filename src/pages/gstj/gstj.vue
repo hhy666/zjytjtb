@@ -85,6 +85,7 @@ export default {
       gotoGsDetail(index, idx){
           // 设置 点击的公司信息
           Taro.setStorageSync("showType",this.tableData[index].children[idx].id);
+          Taro.setStorageSync("showArea",1);
           Taro.setStorageSync("showTypeName",this.tableData[index].children[idx].gsname);
 
           Taro.reLaunch({

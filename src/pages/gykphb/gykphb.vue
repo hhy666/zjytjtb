@@ -1,37 +1,37 @@
 <template>
-  <view class='compare'>
-    <view class="compare_part_1" >
-      <text class="compare_part_1_title" >{{comparePart1Title}}</text>
-      <view class="compare_chart_jnqndb" >
-        <chart :option="jnqndbOption" />
-      </view>
+  <view class='gykphb'>
+    <view class="gykphb_part_1" >
+        <text class="gykphb_part_1_title" >{{gykphbPart1Title}}</text>
+        <view class="gykphb_chart_jnqndb" >
+            <!-- <chart :option='gykphbOption' /> -->
+        </view>
     </view>
   </view>
 </template>
 
 <script>
-import './compare.scss'
+import './gykphb.scss'
 import Taro from '@tarojs/taro'
 import requestData from '../util/request'
 import chart from "../chart/chart.vue";
 
 export default {
-  name: 'compare',
+  name: 'gykphb',
   data(){
     return {
-        comparePart1Title:'本年开票收入与去年同期对比',
-        jnqndbOption:null
+        gykphbPart1Title:'各月开票收入环比情况',
+        gykphbOption:null
     }
   },
   components: {
       chart: chart
   },
   created(){
-      this.initJnqndbOption();
+    //   this.initGykphbOption();
   },
   mounted(){},
   methods: {
-      initJnqndbOption(){
+      initGykphbOption(){
         const _this = this;
 
         // 获取缓存的id
