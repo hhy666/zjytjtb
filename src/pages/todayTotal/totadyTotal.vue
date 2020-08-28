@@ -50,10 +50,18 @@ export default {
       const operId = showArea == 0 ? 'findTodayTotal' 
         : ((showArea == 1 || showArea == 2) ? 'findTotalCompany' : 'findTodayTotalCpx' );
 
+      let rdata = {companyId: companyId};
+
+      if(companyId == "东南亚区域" || companyId == "欧洲区域"
+          || companyId == "非洲区域"){
+          const childs = Taro.getStorageSync("childs");
+          rdata = {companyId: companyId,childs: childs};
+      }
+
       requestData({
             operServiceId: 'reportService',
             operId: operId,
-            data: {companyId: companyId}
+            data: rdata
         },response => {
             if(response.data.data.ttdata == undefined){
                 alert("数据查询出错！");

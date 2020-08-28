@@ -63,16 +63,30 @@ export default {
       // 获取缓存的id
       const companyId = Taro.getStorageSync("showType");    
 
+      // data
+      let rdata = {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis};
+
+      if(companyId == "东南亚区域" || companyId == "欧洲区域"
+        || companyId == "非洲区域"){
+        const childs = Taro.getStorageSync("childs");
+        rdata = {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis,childs: childs};
+      }
+
       requestData({
           operServiceId: 'reportService',
           operId: 'findJtgsTableKh',
-          data: {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
+          data: rdata
       },response => {
+        if(response.data.data.tableData == undefined){
+            _this.showLoadMore = false;
+            _this.dataLoading = false;
+            return false;
+          }
         _this.tableData = response.data.data.tableData;
-        this.dataLoading = false;
+        _this.dataLoading = false;
 
         if(response.data.data.tableData.length < 10 || this.pageNum > 10){
-          this.showLoadMore = false;
+          _this.showLoadMore = false;
         }
       });
   },
@@ -89,16 +103,30 @@ export default {
         // 获取缓存的id
         const companyId = Taro.getStorageSync("showType");    
 
+        // data
+        let rdata = {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis};
+
+        if(companyId == "东南亚区域" || companyId == "欧洲区域"
+          || companyId == "非洲区域"){
+          const childs = Taro.getStorageSync("childs");
+          rdata = {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis,childs: childs};
+        }
+
         requestData({
             operServiceId: 'reportService',
             operId: 'findJtgsTableKh',
-            data: {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
+            data: rdata
         },response => {
+          if(response.data.data.tableData == undefined){
+            _this.showLoadMore = false;
+            _this.dataLoading = false;
+            return false;
+          }
           _this.tableData = response.data.data.tableData;
-          this.dataLoading = false;
+          _this.dataLoading = false;
           
-          if(response.data.data.tableData.length < 10 || this.pageNum > 10){
-            this.showLoadMore = false;
+          if(response.data.data.tableData.length < 10 || _this.pageNum > 10){
+            _this.showLoadMore = false;
           }
         });
       },
@@ -109,16 +137,31 @@ export default {
         // 获取缓存的id
         const companyId = Taro.getStorageSync("showType");    
 
+        // data
+        let rdata = {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis};
+
+        if(companyId == "东南亚区域" || companyId == "欧洲区域"
+          || companyId == "非洲区域"){
+          const childs = Taro.getStorageSync("childs");
+          rdata = {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis,childs: childs};
+        }
+
         requestData({
           operServiceId: 'reportService',
           operId: 'findJtgsTableKh',
-          data: {companyId: companyId,pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
+          data: rdata
         },response => {
-          _this.tableData = _this.tableData.concat(response.data.data.tableData);
-          this.dataLoading = false;
+          if(response.data.data.tableData == undefined){
+            _this.showLoadMore = false;
+            _this.dataLoading = false;
+            return false;
+          }
 
-          if(response.data.data.tableData.length < 10 || this.pageNum > 10){
-            this.showLoadMore = false;
+          _this.tableData = _this.tableData.concat(response.data.data.tableData);
+          _this.dataLoading = false;
+
+          if(response.data.data.tableData.length < 10 || _this.pageNum > 10){
+            _this.showLoadMore = false;
           }
         });
       },
@@ -147,6 +190,12 @@ export default {
       },
       touchEnd(e,name,idx){
         $("#over_name_"+idx).remove();
+
+        Taro.setStorageSync("khmc",name);
+
+        Taro.navigateTo({
+          url:'../khmsg/khmsg?s='+Math.random()
+        });
       }
     }
 }

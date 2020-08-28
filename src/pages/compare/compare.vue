@@ -62,6 +62,9 @@ export default {
 
             _this.jnqndbOption = {
                 color:['#00B0F0','#3F6CFE','#FF1F1F'],
+                tooltip:{
+                    triggrt:"x"
+                },
                 legend:[{
                     height:20,
                     top:5,
@@ -71,7 +74,7 @@ export default {
                 }],
                 grid:[{
                     left: 45,
-                    right: 30,
+                    right: 35,
                     top: 30,
                     bottom: 60,
                     height: '75%'

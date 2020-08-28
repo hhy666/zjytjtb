@@ -43,10 +43,19 @@ export default {
       // 获取缓存的id
       const companyId = Taro.getStorageSync("showType");    
 
+      // data
+      let rdata = {companyId: companyId};
+
+      if(companyId == "东南亚区域" || companyId == "欧洲区域"
+        || companyId == "非洲区域"){
+        const childs = Taro.getStorageSync("childs");
+        rdata = {companyId: companyId,childs: childs};
+      }
+
       requestData({
           operServiceId: 'reportService',
           operId: 'findJTGSCompanyCpx',
-          data: {companyId: companyId}
+          data: rdata
       },response => {
         _this.tableData = response.data.data.tableData;
       });

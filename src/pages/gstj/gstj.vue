@@ -11,14 +11,13 @@
             <text class="gstj_table_head_th" >出证数量</text>
         </view>
         <view class="gstj_table_tr" v-for="(item,index) in tableData" :key="index" >
-            <view class="gstj_table_head_td" >
+            <a class="gstj_table_head_td" @click="showChildrenData(index)" >
                 <a :class="{icon_close:!showedChildrenIndex[index], icon_open: showedChildrenIndex[index]}" 
-                    v-if="item.children.length > 0"
-                    @click="showChildrenData(index)" ></a>
+                    v-if="item.children.length > 0" ></a>
                 <text class="gtht_name" 
                     :class="{iconNotExist:item.children.length == 0}" 
                     >{{item.gsname}}</text>
-            </view>
+            </a>
             <text class="gstj_table_head_td" >{{item.wtdl}}</text>
             <text class="gstj_table_head_td" >{{item.kpsr}}</text>
             <text class="gstj_table_head_td" >{{item.cbze}}</text>

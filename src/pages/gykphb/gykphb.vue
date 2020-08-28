@@ -3,7 +3,7 @@
     <view class="gykphb_part_1" >
         <text class="gykphb_part_1_title" >{{gykphbPart1Title}}</text>
         <view class="gykphb_chart_jnqndb" >
-            <!-- <chart :option='gykphbOption' /> -->
+            <chart :option='gykphbOption' />
         </view>
     </view>
   </view>
@@ -27,7 +27,7 @@ export default {
       chart: chart
   },
   created(){
-    //   this.initGykphbOption();
+      this.initGykphbOption();
   },
   mounted(){},
   methods: {
@@ -39,11 +39,11 @@ export default {
 
         requestData({
             operServiceId: 'reportService',
-            operId: 'findInvoiceData',
+            operId: 'findInvoiceDataCpx',
             data: {companyId: companyId}
         },response => {
             if(response.error){
-                _this.jnqndbOption = {
+                _this.gykphbOption = {
                     error: true,
                     msg: response.error
                 }
@@ -53,25 +53,14 @@ export default {
 
             const option = response.data.data;
 
-            const legendData = [];
-
-            legendData.push({name:'去年收入',icon:'rect'});
-            legendData.push({name:'今年收入',icon:'rect'});
-            legendData.push({name:'同比',icon:'path://M10,10 L19,10 L19,12 L10,12 M,20,11 a3,3 0 1,0 6,0 a3,3 0 1, 0 -6, 0 M27,10 L36,10 L36,12 L27,12Z'});
-
-
-            _this.jnqndbOption = {
-                color:['#00B0F0','#3F6CFE','#FF1F1F'],
-                legend:[{
-                    height:20,
-                    top:5,
-                    itemWidth:20,
-                    itemHeight:8,
-                    data:legendData
-                }],
+            _this.gykphbOption = {
+                color:['#5087E5','#FF1516'],
+                tooltip:{
+                    triggrt:"x"
+                },
                 grid:[{
                     left: 45,
-                    right: 30,
+                    right: 35,
                     top: 30,
                     bottom: 60,
                     height: '75%'
@@ -138,26 +127,17 @@ export default {
                     boundaryGap:300
                 }],
                 series:[{
-                    name: legendData[0].name,
                     type: 'bar',
                     barGap: '10%',
                     symbol: 'rect',
                     symbolSize: 8,
                     data: option.seriesData[0]
                 },{
-                    name: legendData[1].name,
-                    type: 'bar',
-                    barGap: '10%',
-                    symbol: 'rect',
-                    symbolSize: 8,
-                    data: option.seriesData[1]
-                },{
-                    name: legendData[2].name,
                     type: 'line',
                     yAxisIndex:1,
                     symbol: 'circle',
                     symbolSize: 8,
-                    data: option.seriesData[2]
+                    data: option.seriesData[1]
                 }]
             }
         });

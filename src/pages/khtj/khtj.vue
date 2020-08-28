@@ -18,7 +18,7 @@
         <view class="khtj_table_tr" v-for="(item,index) in tableData" :key="index" >
             <a class="khtj_table_head_td khname" 
               @touchstart="touchStart($event,item.khname,index)" 
-              @touchend="touchEnd($event,item.khname,index)" 
+              @touchend="touchEnd($event,item.khname,index)"
               :title="item.khname" >
               {{item.khname.length > 6 ? item.khname.substr(0,6) + '..' : item.khname}}
             </a>
@@ -67,11 +67,15 @@ export default {
           operId: operId,
           data: {cpxName: cpxName, pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
       },response => {
+        if(response.data.data.tableData == undefined){
+          _this.dataLoading = false;
+          return false;
+        }
         _this.tableData = response.data.data.tableData;
         this.dataLoading = false;
 
-        if(response.data.data.tableData.length < 10 || this.pageNum > 10){
-          this.showLoadMore = false;
+        if(response.data.data.tableData.length < 10 || _this.pageNum > 10){
+          _this.showLoadMore = false;
         }
       });
   },
@@ -93,11 +97,15 @@ export default {
           operId: operId,
           data: {cpxName: cpxName, pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
         },response => {
+          if(response.data.data.tableData == undefined){
+            _this.dataLoading = false;
+            return false;
+          }
           _this.tableData = response.data.data.tableData;
-          this.dataLoading = false;
+          _this.dataLoading = false;
           
-          if(response.data.data.tableData.length < 10 || this.pageNum > 10){
-            this.showLoadMore = false;
+          if(response.data.data.tableData.length < 10 || _this.pageNum > 10){
+            _this.showLoadMore = false;
           }
         });
       },
@@ -113,11 +121,15 @@ export default {
           operId: operId,
           data: {cpxName: cpxName, pageNum: this.pageNum++ +'',groupType:'0'+this.chooseThis}
         },response => {
+          if(response.data.data.tableData == undefined){
+            _this.dataLoading = false;
+            return false;
+          }
           _this.tableData = _this.tableData.concat(response.data.data.tableData);
-          this.dataLoading = false;
+          _this.dataLoading = false;
 
-          if(response.data.data.tableData.length < 10 || this.pageNum > 10){
-            this.showLoadMore = false;
+          if(response.data.data.tableData.length < 10 || _this.pageNum > 10){
+            _this.showLoadMore = false;
           }
         });
       },
@@ -146,6 +158,12 @@ export default {
       },
       touchEnd(e,name,idx){
         $("#over_name_"+idx).remove();
+
+        Taro.setStorageSync("khmc",name);
+
+        Taro.navigateTo({
+          url:'../khmsg/khmsg?s='+Math.random()
+        });
       }
   }
 }

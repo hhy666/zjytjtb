@@ -13,12 +13,20 @@
         <text class="second_title" >{{secondTitle}}</text>
         <text class="data_date" >{{dataDate}}</text>
       </view>
-      <a class="ptn_right" @click="showOrHideExplain()" >
+      <view class="ptn_right" >
+        <a class="ptn_right_1" @click="showOrHideExplain()" >
           <view class="ptn_right_left" >
             <text class="circle" >?</text>
           </view>
           <text class="data_explain" >{{dataExplain}}</text>
-      </a>
+        </a>
+        <a class="ptn_right_2" @click="showOrHideComMsg()" v-if="false" >
+            <view class="ptn_right_left" >
+              <text class="circle" ></text>
+            </view>
+            <text class="data_explain" >{{comMsg}}</text>
+        </a>
+      </view>
     </view>
     <view class="today_total_msg" >
       <TodayTotal></TodayTotal>
@@ -50,6 +58,7 @@
     <a v-if="showedTabId == 1 || showedTabId == 2" class="change_company" @click="showChoosedCompany()" >公司  切换</a>
     <showCompany v-if="showCompany" :showChoosedCompany="showChoosedCompany" ></showCompany>
     <explain v-if="isShowExplain" :showOrHideExplain="showOrHideExplain" ></explain>
+    <a v-if="showToTop0" class="zhiding" @click="toTop0()" >置顶</a>
   </view>
 </template>
 
@@ -80,6 +89,7 @@ export default {
       secondTitle:String,
       dataDate: "数据更新截止 " + new Date().toISOString().slice(0,10) + ' ' + new Date().toTimeString().slice(0,8),
       dataExplain: "数据说明",
+      comMsg: "公司信息",
       isShowExplain:false,
       pmHeight:Number,
       tabData:Array,
@@ -87,7 +97,8 @@ export default {
       showedTabIndex:0,
       showCompany:false,
       scrollTop:Number,
-      areaTabTop:[586,1126,1126,1396]
+      areaTabTop:[586,1126,1126,1396],
+      showToTop0:false
     }
   },
   components: {
@@ -215,18 +226,24 @@ export default {
     },
     setCssByClass(classs,sctop,val){
       if(sctop >= val){
+        this.showToTop0 = true;
         $(classs).css({
           position: "fixed",
           top: "0Px",
           width: "90%"
         });
       }else{
+        this.showToTop0 = false;
         $(classs).css({
           position: "relative",
           top: "0",
           width: "100%"
         });
       }
+    },
+    toTop0(){
+      document.scrollingElement.scrollTop = 0;
+      this.showToTop0 = false;
     }
   }
 }

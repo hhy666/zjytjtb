@@ -86,6 +86,12 @@ export default {
           Taro.setStorageSync("showType",this.tableData[index].id);
           Taro.setStorageSync("showArea",2);
           Taro.setStorageSync("showTypeName",this.tableData[index].gsname);
+          // 拼接子公司名称用于查询
+          let childs = "";
+          this.tableData[index].children.forEach(element => {
+            childs += "'"+element.id+"',";
+          });
+          Taro.setStorageSync("childs",childs);
         }else{
           Taro.setStorageSync("showType",this.tableData[index].children[idx].id);
           Taro.setStorageSync("showArea",2);

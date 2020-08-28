@@ -59,10 +59,19 @@ export default {
 
     const _this = this;
 
+    // data
+    let rdata = {companyId: _this.curCompanyId};
+
+    if(_this.curCompanyId == "东南亚区域" || _this.curCompanyId == "欧洲区域"
+        || _this.curCompanyId == "非洲区域"){
+        const childs = Taro.getStorageSync("childs");
+        rdata = {companyId: _this.curCompanyId,childs: childs};
+    }
+
     requestData({
         operServiceId: 'reportService',
         operId: 'findJtgsCompanyMsg',
-        data: {companyId: _this.curCompanyId}
+        data: rdata
     },response => {
         _this.tableData = response.data.data.tableData;
     });      

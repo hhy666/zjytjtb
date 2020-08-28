@@ -37,11 +37,19 @@ export default {
     const showArea = Taro.getStorageSync("showArea");  
     // operId
     const operId = showArea < 3 ? 'findJtgsGxbar' : 'findCpxGxbar';
+    // data
+    let rdata = {companyId: companyId};
+
+    if(companyId == "东南亚区域" || companyId == "欧洲区域"
+        || companyId == "非洲区域"){
+        const childs = Taro.getStorageSync("childs");
+        rdata = {companyId: companyId,childs: childs};
+    }
 
     requestData({
         operServiceId: 'reportService',
         operId: operId,
-        data: {companyId: companyId}
+        data: rdata
     },response => {
         _this.initGxbarOption(response.data.data.gxbarOption);
         // setTimeout(()=>{
