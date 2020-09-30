@@ -1,8 +1,7 @@
-<<<<<<< HEAD
-=======
+
 const path = require('path');
 
->>>>>>> develop
+
 const config = {
   projectName: 'zjytjtb',
   date: '2020-8-10',
